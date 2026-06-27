@@ -1,16 +1,49 @@
 from extract import cargar_datasets
-from transform import perfil_dataset
+from transform import (
+    limpiar_propiedades,
+    limpiar_pobreza,
+    normalizar_comunas,
+    unir_datasets,
+    comparar_comunas,
+    perfil_dataset,
+)
+import os
 
+# Extraer datos
 casas_marzo, casas_julio, pobreza = cargar_datasets()
 
-perfil_dataset(casas_marzo, "Casas Marzo")
-perfil_dataset(casas_julio, "Casas Julio")
-perfil_dataset(pobreza, "Pobreza")
+# Transformar
+casas_marzo = limpiar_propiedades(casas_marzo)
+casas_julio = limpiar_propiedades(casas_julio)
 
-if "Comuna" in df.columns:
+casas_marzo = normalizar_comunas(casas_marzo)
+casas_julio = normalizar_comunas(casas_julio)
 
-    print("\nNúmero de comunas distintas:")
-    print(df["Comuna"].nunique())
+pobreza = limpiar_pobreza(pobreza)
 
-    print("\nPrimeras comunas:")
-    print(sorted(df["Comuna"].dropna().unique())[:20])
+# Unir datasets de propiedades
+casas = unir_datasets(casas_marzo, casas_julio)
+
+# Verificar comunas
+comparar_comunas(casas, pobreza)
+
+# Merge final
+dataset_final = casas.merge(
+    pobreza,
+    left_on="Comuna",
+    right_on="Nombre comuna",
+    how="left"
+)
+
+# Revisar resultado
+perfil_dataset(dataset_final, "Dataset Final")
+
+os.makedirs("data/processed", exist_ok=True)
+
+dataset_final.to_csv(
+    "data/processed/dataset_final.csv",
+    index=False,
+    encoding="utf-8-sig"
+)
+
+print("\nDataset guardado correctamente.")
