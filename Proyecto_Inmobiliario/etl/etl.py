@@ -12,6 +12,8 @@ from load import guardar_sqlite
 
 # Extraer datos
 casas_marzo, casas_julio, pobreza = cargar_datasets()
+print("\n=== REGIONES DEL DATASET ORIGINAL ===")
+print(pobreza["Región"].unique())
 
 # Transformar
 casas_marzo = limpiar_propiedades(casas_marzo)
@@ -19,6 +21,7 @@ casas_julio = limpiar_propiedades(casas_julio)
 
 casas_marzo = normalizar_comunas(casas_marzo)
 casas_julio = normalizar_comunas(casas_julio)
+print(pobreza["Región"].unique())
 
 pobreza = limpiar_pobreza(pobreza)
 
@@ -28,6 +31,15 @@ casas = unir_datasets(casas_marzo, casas_julio)
 # Verificar comunas
 comparar_comunas(casas, pobreza)
 
+print("\nComunas en casas:")
+print(sorted(casas["Comuna"].unique())[:10])
+
+print("\nComunas en pobreza:")
+print(sorted(pobreza["Nombre comuna"].unique())[:10])
+
+print("\nColumnas de pobreza:")
+print(pobreza.columns.tolist())
+
 # Merge final
 dataset_final = casas.merge(
     pobreza,
@@ -35,6 +47,10 @@ dataset_final = casas.merge(
     right_on="Nombre comuna",
     how="left"
 )
+
+print(dataset_final[
+    ["Comuna", "Nombre comuna", "Porcentaje de personas en situación de pobreza por ingresos 2022"]
+].head(20))
 
 # Revisar resultado
 perfil_dataset(dataset_final, "Dataset Final")

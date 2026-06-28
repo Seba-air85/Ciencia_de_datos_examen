@@ -95,7 +95,9 @@ def limpiar_pobreza(df):
 
     print("\nLimpiando dataset de pobreza...")
 
-    df = df[df["Región"] == "Metropolitana de Santiago"]
+    df["Región"] = df["Región"].astype(str).str.strip()
+
+    df = df[df["Región"].str.contains("Metropolitana", case=False, na=False)]
 
     # Eliminar filas sin comuna
     df = df.dropna(subset=["Nombre comuna"])
