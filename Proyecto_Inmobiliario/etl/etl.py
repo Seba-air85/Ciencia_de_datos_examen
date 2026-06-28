@@ -8,6 +8,7 @@ from transform import (
     perfil_dataset,
 )
 import os
+from load import guardar_sqlite
 
 # Extraer datos
 casas_marzo, casas_julio, pobreza = cargar_datasets()
@@ -47,3 +48,5 @@ dataset_final.to_csv(
 )
 
 print("\nDataset guardado correctamente.")
+
+guardar_sqlite(dataset_final)
