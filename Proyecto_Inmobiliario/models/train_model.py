@@ -5,6 +5,8 @@ from sklearn.metrics import mean_squared_error
 from sklearn.metrics import r2_score
 import joblib
 import os
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
 
 conexion = sqlite3.connect("database/inmobiliaria.db")
 
@@ -51,7 +53,6 @@ X = pd.get_dummies(
 
 print(X.head())
 
-from sklearn.model_selection import train_test_split
 
 X_train, X_test, y_train, y_test = train_test_split(
     X,
@@ -63,7 +64,6 @@ X_train, X_test, y_train, y_test = train_test_split(
 print(X_train.shape)
 print(X_test.shape)
 
-from sklearn.linear_model import LinearRegression
 
 modelo = LinearRegression()
 
