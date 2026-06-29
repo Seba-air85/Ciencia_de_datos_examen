@@ -51,6 +51,8 @@ X = pd.get_dummies(
     drop_first=True
 )
 
+columnas_modelo = X.columns
+
 print(X.head())
 
 
@@ -85,4 +87,13 @@ os.makedirs("models/modelo", exist_ok=True)
 
 joblib.dump(modelo, "models/modelo/modelo_precio.pkl")
 
+joblib.dump(columnas_modelo, "models/modelo/columnas.pkl")
+
 print("Modelo guardado correctamente.")
+
+print("\n===== MÉTRICAS DEL MODELO =====")
+print(f"MAE : {mae:,.2f}")
+print(f"RMSE: {rmse:,.2f}")
+print(f"R²  : {r2:.4f}")
+
+print("\nModelo entrenado y guardado correctamente.")
